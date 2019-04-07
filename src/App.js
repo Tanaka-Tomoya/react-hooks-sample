@@ -1,28 +1,41 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
+const useNumberStatus = number => {
+  const [isAho, setAho] = useState(null);
+  useEffect(() => {
+    function hoge(number) {
+      if (number % 3 === 0) {
+        setAho(true);
+      } else {
+        setAho(false);
+      }
+      return () => {
+        setAho(null);
+      };
+    }
+    hoge(number);
+    return () => {
+      setAho(null);
+    };
+  }, [isAho, number]);
+  return isAho;
+};
+
+function App() {
+  const [count, setCount] = useState(() => {
+    const num = 1;
+    return num;
+  });
+  const isAho = useNumberStatus(count);
+  console.log(isAho);
+  return (
+    <div>
+      <p>{count}</p>
+      {isAho ? "アホ" : ""}
+      <br />
+      <button onClick={() => setCount(count + 1)}>Click me</button>
+    </div>
+  );
 }
 
 export default App;
