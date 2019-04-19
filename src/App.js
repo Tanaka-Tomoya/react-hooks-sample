@@ -1,41 +1,34 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import CounterContext from "./contexts/counter";
+import Counter from "./components/counter";
 
-const useNumberStatus = number => {
-  const [isAho, setAho] = useState(null);
-  useEffect(() => {
-    function hoge(number) {
-      if (number % 3 === 0) {
-        setAho(true);
-      } else {
-        setAho(false);
-      }
-      return () => {
-        setAho(null);
-      };
-    }
-    hoge(number);
-    return () => {
-      setAho(null);
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.increment = this.increment.bind(this);
+    this.decrement = this.decrement.bind(this);
+
+    this.state = {
+      count: 0,
+      increment: this.increment,
+      decrement: this.decrement
     };
-  }, [isAho, number]);
-  return isAho;
-};
+  }
 
-function App() {
-  const [count, setCount] = useState(() => {
-    const num = 1;
-    return num;
-  });
-  const isAho = useNumberStatus(count);
-  console.log(isAho);
-  return (
-    <div>
-      <p>{count}</p>
-      {isAho ? "アホ" : ""}
-      <br />
-      <button onClick={() => setCount(count + 1)}>Click me</button>
-    </div>
-  );
+  increment() {
+    this.setState({ count: this.state.count + 1 });
+  }
+  decrement() {
+    this.setState({ count: this.state.count - 1 });
+  }
+  render() {
+    return (
+      <CounterContext.Provider value={this.state}>
+        <Counter />
+      </CounterContext.Provider>
+    );
+  }
 }
 
 export default App;
