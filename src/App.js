@@ -1,32 +1,72 @@
 import React from "react";
-import CounterContext from "./contexts/counter";
-import Counter from "./components/counter";
+import "./App.css";
+
+const UserContext = React.createContext();
+
+const UserAvatar = ({ size }) => (
+  <UserContext.Consumer>
+    {user => (
+      <img
+        className={`user-avater ${size || ""}`}
+        alt="user avatar"
+        src={user.avatar}
+      />
+    )}
+  </UserContext.Consumer>
+);
+const UserStats = () => (
+  <UserContext.Consumer>
+    {user => (
+      <div className="user-stats">
+        <div>
+          <UserAvatar />
+          {user.name}
+        </div>
+      </div>
+    )}
+  </UserContext.Consumer>
+);
+
+const Nav = () => (
+  <div className="nav">
+    <UserAvatar size="small" />
+  </div>
+);
+
+const Content = () => <div className="content">main content here</div>;
+
+const Sidebar = () => (
+  <div className="sidebar">
+    <UserStats />
+  </div>
+);
+
+const Body = () => (
+  <div className="body">
+    <Sidebar />
+    <Content />
+  </div>
+);
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
+  state = {
+    user: {
+      avatar:
+        "https://www.gravatar.com/avatar/5c3dd2d257ff0e14dbd2583485dbd44b",
+      name: "Dave",
+      followers: 1234,
+      following: 123
+    }
+  };
 
-    this.increment = this.increment.bind(this);
-    this.decrement = this.decrement.bind(this);
-
-    this.state = {
-      count: 0,
-      increment: this.increment,
-      decrement: this.decrement
-    };
-  }
-
-  increment() {
-    this.setState({ count: this.state.count + 1 });
-  }
-  decrement() {
-    this.setState({ count: this.state.count - 1 });
-  }
   render() {
     return (
-      <CounterContext.Provider value={this.state}>
-        <Counter />
-      </CounterContext.Provider>
+      <div className="app">
+        <UserContext.Provider value={this.state.user}>
+          <Nav />
+          <Body />
+        </UserContext.Provider>
+      </div>
     );
   }
 }
