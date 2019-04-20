@@ -7,7 +7,7 @@ const RoomContext = React.createContext();
 
 // A component whose sole job is to manage
 // the state of the Room
-class RoomStore extends React.Component {
+export class RoomStore extends React.Component {
   state = {
     isLit: false
   };
@@ -33,7 +33,7 @@ class RoomStore extends React.Component {
 
 // Receive the state of the light, and the function to
 // toggle the light, from RoomContext
-const Room = () => (
+export const Room = () => (
   <RoomContext.Consumer>
     {({ isLit, onToggleLight }) => (
       <div className={`room ${isLit ? "lit" : "dark"}`}>
@@ -45,17 +45,4 @@ const Room = () => (
   </RoomContext.Consumer>
 );
 
-const App = () => (
-  <div className="app">
-    <Room />
-  </div>
-);
-
-// Wrap the whole app in the RoomStore
-// this would work just as well inside `App`
-ReactDOM.render(
-  <RoomStore>
-    <App />
-  </RoomStore>,
-  document.querySelector("#root")
-);
+export default Room;
